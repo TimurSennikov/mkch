@@ -1,0 +1,36 @@
+from django.db import models
+
+class Board(models.Model):
+    code = models.CharField(max_length=20, help_text="Код доски (например, b)", primary_key=True)
+    description = models.TextField(help_text="Описание доски, которое видят пользователи в её шапке")
+
+    def __str__(self):
+        return self.code
+
+class Thread(models.Model):
+    creation = models.DateTimeField(help_text="Дата и время создания", auto_now=True)
+
+    board = models.ForeignKey(Board, help_text="Доска треда", on_delete=models.SET_NULL, null=True)
+
+    title = models.CharField(max_length=20, help_text="Заголовок", default="None")
+    text = models.TextField(help_text="Текст")
+
+    def __str__(self):
+        return str(self.id)
+
+class Comment(models.Model):
+    creation = models.DateTimeField(help_text="Дата и время создания", auto_now=True)
+    thread = models.ForeignKey(Thread, help_text="Тред, к которому пишется комментарий", on_delete=models.SET_NULL, null=True)
+
+    text = models.TextField(help_text="Текст")
+
+    def __str__(self):
+        return str(self.thread.id) + ", " + str(self.id)
+
+class ThreadFile(models.Model):
+    thread = models.ForeignKey(Thread, help_text="Тред, которому принадлежит файл", on_delete=models.SET_NULL, null=True)
+    file = models.FileField(help_text="Файл", null=True)
+
+class CommentFile(models.Model):
+    comment = models.ForeignKey(Comment, help_text="Коммент, которому принадлежит файл", on_delete=models.SET_NULL, null=True)
+    file = models.FileField(help_text="Файл", null=True)
