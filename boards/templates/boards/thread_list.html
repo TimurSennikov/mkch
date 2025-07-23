@@ -8,7 +8,13 @@
 			<div class="thread">
 				{% if thread.files %}
 					{% for file in thread.files %}
-						<a href="{{file.file.url}}">{{file.file.name}}</a>
+						{% if file.fclass == "photo" %}
+							<img src="{{file.file.url}}"></img>
+						{% elif file.fclass == "video" %}
+							<video src="{{file.file.url}}"><source src="{{file.file.path}}" type="video/{{file.type}}">Your browser does not support this tag.</video>
+						{% else %}
+							<a src="{{file.file.url}}">{{file.file.name}}</a>
+						{% endif %}
 					{% endfor %}
 				{% endif %}
 				<h2>{{thread.title}}</h2>
@@ -18,8 +24,14 @@
 					{% for comment in thread.comments %}
 						<div class="comment">
 							{% if comment.files %}
-								{% for file in comment.files %}
-									<a href="{{file.file.url}}">{{file.file.name}}</a>
+								{% for file in thread.files %}
+									{% if file.fclass == "photo" %}
+										<img src="{{file.file.url}}"></img>
+									{% elif file.fclass == "video" %}
+										<video src="{{file.file.url}}"><source src="{{file.file.path}}" type="video/{{file.type}}">Your browser does not support this tag.</video>
+									{% else %}
+										<a src="{{file.file.url}}">{{file.file.name}}</a>
+									{% endif %}
 								{% endfor %}
 							{% endif %}
 
