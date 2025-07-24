@@ -40,7 +40,7 @@ def create_new_thread(request, pk):
         if form.is_valid():
             data = form.cleaned_data
 
-            nt = Thread(board=board, title=data['title'], text=data['text'])
+            nt = Thread(board=board, title=data['title'], text=data['text'], author=request.user)
             nt.save()
 
             if request.FILES is not None and len(request.FILES.getlist('files')) > 0:
@@ -75,7 +75,7 @@ def add_comment_to_thread(request, pk, tpk):
         if form.is_valid():
             data = form.cleaned_data
 
-            nc = Comment(thread=thread, text=data['text'])
+            nc = Comment(thread=thread, text=data['text'], author=request.user)
             nc.save()
 
             if request.FILES is not None and len(request.FILES.getlist('files')) > 0:

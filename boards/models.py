@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Board(models.Model):
@@ -20,6 +21,7 @@ class Thread(models.Model):
         ]
 
     creation = models.DateTimeField(help_text="Дата и время создания", auto_now=True)
+    author = models.ForeignKey(User, help_text="Создатель треда", on_delete=models.SET_NULL, null=True)
 
     board = models.ForeignKey(Board, help_text="Доска треда", on_delete=models.SET_NULL, null=True)
 
@@ -31,7 +33,9 @@ class Thread(models.Model):
 
 class Comment(models.Model):
     creation = models.DateTimeField(help_text="Дата и время создания", auto_now=True)
+
     thread = models.ForeignKey(Thread, help_text="Тред, к которому пишется комментарий", on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, help_text="Создатель треда", on_delete=models.SET_NULL, null=True)
 
     text = models.TextField(help_text="Текст")
 
